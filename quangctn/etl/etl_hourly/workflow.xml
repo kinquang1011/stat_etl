@@ -1,0 +1,72 @@
+<workflow-app name="SPARK :: QUANGCTN :: ${group} - ${gameCode} - ${type} - ${logDate} - ${hourly}" xmlns="uri:oozie:workflow:0.5" xmlns:sla="uri:oozie:sla:0.2">
+
+    <global>
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+
+        <configuration>
+            <property><name>mapreduce.job.queuename</name><value>production</value></property>
+            <property><name>oozie.launcher.mapred.job.queue.name</name><value>interactive</value></property>
+        </configuration>
+    </global>
+
+    <start to="raw_to_ubparquet" />
+
+    <action name="raw_to_ubparquet">
+       <spark xmlns="uri:oozie:spark-action:0.1">
+         <job-tracker>${jobTracker}</job-tracker>
+         <name-node>${nameNode}</name-node>
+         <master>${sparkMaster}</master>
+         <name>spark-etl-${gameCode}-${type}-${logDate}-${hourly}</name>
+         <class>${sparkClass}</class>
+         <jar>${nameNode}${bundleApplicationPath}/lib/${etlJar}</jar>
+         <spark-opts>${sparkOpts}</spark-opts>
+         <arg>logDate=${logDate}</arg>
+         <arg>className=${className}</arg>
+         <arg>hourly=${hourly}</arg>
+        </spark>
+        <ok to="report"/>
+        <error to="alert-error"/>
+    </action>
+
+   <action name="report">
+       <spark xmlns="uri:oozie:spark-action:0.1">
+           <job-tracker>${jobTracker}</job-tracker>
+           <name-node>${nameNode}</name-node>
+           <master>${sparkMaster}</master>
+           <name>spark-report-${gameCode}-${type}-${logDate}-${hourly}</name>
+           <class>vng.ge.stats.etl.adhoc.IngameReportHourly</class>
+           <jar>${nameNode}${bundleApplicationPath}/lib/${reportJar}</jar>
+           <spark-opts>${sparkOpts}</spark-opts>
+           <arg>logDate=${logDate}</arg>
+           <arg>gameCode=${gameCode}</arg>
+           <arg>serverReport=${serverReport}</arg>
+           <arg>hourInDay=${hourInDay}</arg>
+       </spark>
+       <ok to="end"/>
+       <error to="alert-error"/>
+    </action>
+ 
+    <action name="alert-error">
+        <email xmlns="uri:oozie:email-action:0.1">
+            <to>${toRecipients}</to>
+            <subject>WORKFLOW FAILED :::: ${wf:name()}</subject>
+            <body>
+LOG DATE: ${logDate}
+NAME: ${wf:name()}
+ID: ${wf:id()}
+PATH: ${wf:appPath()}
+ERROR MESSAGE: [${wf:errorMessage(wf:lastErrorNode())}]
+            </body>
+        </email>
+        <ok to="kill"/>
+        <error to="kill"/>
+  </action>
+  
+    <kill name="kill">
+        <message>UB :: TLV :: ${group} -${gameCode} - ${type} - workflow fail</message>
+    </kill>
+    <end name="end"/>
+    
+</workflow-app>
+

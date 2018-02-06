@@ -1,0 +1,443 @@
+ttk
+
+
+
+
+#### check Code CCU
+spark.read.parquet("/ge/fairy/warehouse/flumeccu/2017-10-03").select("name","cmdb_prd_code").distinct().show(200,false)
+
+##### hk - dbggames - pc
+
+##### ck - dbggames - pc
+
+##### kv - dbggames - pc
+
+
+#### cgmfbs
+
+ spark.read.option("delimiter","\t").csv("/ge/warehouse/sgmb/recharge/2017-10-03/part-v000-o000-r-00000.gz").agg(sum("_c5").cast("long")*100).show
+
+#### tlbbm
+
+ val df = spark.read.option("delimiter","\t").csv("/ge/warehouse/tlbbm/recharge/2017-10-03/part-m-00000.gz")
+
+ val converRate = udf { (s13: String,s10:String) => {
+     var amt = s13.toLong * 200
+     if(s13 == "3000" && s10 < "50"){
+       amt = 500000L
+     }
+     amt
+   }
+   }
+
+var dv = df.withColumn("net_amt",converRate(col("_c13"),col("_c10")))
+dv.agg(sum("net_amt").cast("long")).show
+
+##### cack
+
+spark.read.json("/ge/gamelogs/sdk/2017-10-03/Log_CACK_DBGAdd/Log_CACK_DBGAdd-2017-10-03.gz").where("updateTime like '2017-10-03%'").agg(sum("pmcNetChargeAmt").cast("long")).show
+
+
+##### project c
+
+spark.read.option("delimiter","\t").csv("/ge/gamelogs/projectc/20171105/pjc_20171105_logdb/t_acct_water_*.gz").where("_c11 = '1' and _c10 = '1' and _c9 = '1'").agg(sum("_c15").cast("long")*100).show
+
+##### pjsea
+
+spark.read.option("delimiter","\t").csv("/ge/gamelogs/pjcsea/20171003/logdumpdb/*/t_acct_water_*").where("_c11 = '1' and _c10 = '1' and _c9 = '1'").agg((sum("_c15")*0.25*670).cast("long")).show
+
+
+##### HPT
+
+spark.read.json("/ge/gamelogs/sdk/2017-10-{10,11}/Log_HPT_DBGAdd/Log_HPT_DBGAdd-2017-10-{10,11}.gz").where("updateTime like '2017-10-03%'").agg(sum("pmcNetChargeAmt").cast("long")).show
+
+##### jxm
+
+val raw = spark.read.textFile("/ge/warehouse/jxm/RechargeFlow/2017-10-03/*.gz")
+    val paymentDs = raw.map(line => line.split("\t")).map { line =>
+      val net = line(9)
+      (net)
+    }.toDF("net_amt")
+
+paymentDs.agg(sum("net_amt").cast("long")*100).show
+
+###### stct
+import vng.ge.stats.etl.utils.{Common, DateTimeUtils}
+
+  val dateGmt7 = udf { (dateTime: String) => {
+    val timeStamp = DateTimeUtils.getTimestamp(dateTime)+7*60*60*1000
+    DateTimeUtils.getDate(timeStamp)
+  }
+  }
+
+  val df = spark.read.json("/ge/gamelogs/sdk_sea/2017-09-{19,20}/STCT_Login_InfoLog/STCT_Login_InfoLog-2017-09-{19,20}.gz")
+  df.withColumn("log_time",dateGmt7(col("updatetime"))).filter("log_time like '2017-09-20%'").select("userId").distinct.count
+
+
+
+###### stct
+import vng.ge.stats.etl.utils.{Common, DateTimeUtils}
+
+  val dateGmt7 = udf { (dateTime: String) => {
+    val timeStamp = DateTimeUtils.getTimestamp(dateTime)+7*60*60*1000
+    DateTimeUtils.getDate(timeStamp)
+  }
+  }
+
+  val df = spark.read.json("/ge/gamelogs/sdk_sea/2017-10-{10,11}/Log_STCT_DBGAdd/Log_STCT_DBGAdd-2017-10-{10,11}.gz")
+  df.withColumn("log_time",dateGmt7(col("updatetime"))).filter("log_time like '2017-10-03%'").agg(sum("pmcNetChargeAmt").cast("long")).show
+
+###### nikki thai
+import vng.ge.stats.etl.utils.{Common, DateTimeUtils}
+
+  val dateGmt7 = udf { (dateTime: String) => {
+    val timeStamp = DateTimeUtils.getTimestamp(dateTime)+7*60*60*1000
+    DateTimeUtils.getDate(timeStamp)
+  }
+  }
+      val getGross = udf {(itemId: String, pmcId:String, gross:Long) => {
+      
+      val convertMapStore = Map(
+        "com.pg2.nikkithai.diamond38" -> 69,
+        "com.pg2.nikkithai.diamond90" -> 99,
+        "com.pg2.nikkithai.diamond188" -> 139,
+        "com.pg2.nikkithai.diamond377" -> 249,
+        "com.pg2.nikkithai.diamond578" -> 349,
+        "com.pg2.nikkithai.diamond968" -> 559,
+        "com.pg2.nikkithai.diamond1968" -> 1100,
+        "com.pg2.nikkithai.diamond4188" -> 2300,
+        "com.pg2.nikkithai.gift" -> 35,
+        "com.pg2.nikkithai.packchangename" -> 349,
+        "com.pg2.nikkithai.packstarlight" -> 139,
+        "com.pg2.nikkithai.packstamina" -> 139,
+        "com.pg2.nikkithai.packlargestarlight" -> 349,
+        "com.pg2.nikkithai.packlargestamina" -> 349,
+        "com.pg2.nikkithai.giftdoubleseven" -> 35,
+        "com.pg2.nikkithai.pack99a"->35,
+        "com.pg2.nikkithai.pack99b"->35,
+        "com.pg2.nikkithai.pack99c"->35,
+        "com.pg2.nikkithai.pack99d"->35,
+        "com.pg2.nikkithai.pack99e"->35,
+        "com.pg2.nikkithai.pack99f"->35,
+        "com.pg2.nikkithai.pack199a"->69,
+        "com.pg2.nikkithai.pack199b"->69,
+        "com.pg2.nikkithai.pack199c"->69,
+        "com.pg2.nikkithai.pack199d"->69,
+        "com.pg2.nikkithai.pack199e"->69,
+        "com.pg2.nikkithai.pack199f"->69,
+        "com.pg2.nikkithai.pack299a"->99,
+        "com.pg2.nikkithai.pack299b"->99,
+        "com.pg2.nikkithai.pack299c"->99,
+        "com.pg2.nikkithai.pack299d"->99,
+        "com.pg2.nikkithai.pack299e"->99,
+        "com.pg2.nikkithai.pack299f"->99,
+        "com.pg2.nikkithai.pack399a"->139,
+        "com.pg2.nikkithai.pack399b"->139,
+        "com.pg2.nikkithai.pack399c"->139,
+        "com.pg2.nikkithai.pack399d"->139,
+        "com.pg2.nikkithai.pack399e"->139,
+        "com.pg2.nikkithai.pack399f"->139,
+        "com.pg2.nikkithai.pack499a"->179,
+        "com.pg2.nikkithai.pack499b"->179,
+        "com.pg2.nikkithai.pack499c"->179,
+        "com.pg2.nikkithai.pack499d"->179,
+        "com.pg2.nikkithai.pack499e"->179,
+        "com.pg2.nikkithai.pack499f"->179,
+        "com.pg2.nikkithai.pack599a"->209,
+        "com.pg2.nikkithai.pack599b"->209,
+        "com.pg2.nikkithai.pack599c"->209,
+        "com.pg2.nikkithai.pack599d"->209,
+        "com.pg2.nikkithai.pack599e"->209,
+        "com.pg2.nikkithai.pack599f"->209,
+        "com.pg2.nikkithai.pack699a"->249,
+        "com.pg2.nikkithai.pack699b"->249,
+        "com.pg2.nikkithai.pack699c"->249,
+        "com.pg2.nikkithai.pack699d"->249,
+        "com.pg2.nikkithai.pack699e"->249,
+        "com.pg2.nikkithai.pack699f"->249,
+        "com.pg2.nikkithai.pack799a"->279,
+        "com.pg2.nikkithai.pack799b"->279,
+        "com.pg2.nikkithai.pack799c"->279,
+        "com.pg2.nikkithai.pack999a"->349,
+        "com.pg2.nikkithai.pack999b"->349,
+        "com.pg2.nikkithai.pack999c"->349,
+        "com.pg2.nikkithai.pack1099a"->389,
+        "com.pg2.nikkithai.pack1099b"->389,
+        "com.pg2.nikkithai.pack1099c"->389,
+        "com.pg2.nikkithai.pack1599a"->559,
+        "com.pg2.nikkithai.pack1599b"->559,
+        "com.pg2.nikkithai.pack1599c"->559,
+        "com.pg2.nikkithai.pack2099a"->739,
+        "com.pg2.nikkithai.pack2099b"->739,
+        "com.pg2.nikkithai.pack2099c"->739,
+        "com.pg2.nikkithai.pack3099a"->1100,
+        "com.pg2.nikkithai.pack3099b"->1100,
+        "com.pg2.nikkithai.pack3099c"->1100
+      )
+      
+      var grossRev = gross*650
+          if (itemId != null && pmcId.toLowerCase.contains("store")) {
+                    var vnd: Double = 0
+                    var bac: Double = 0
+                    if (convertMapStore.contains(itemId)) {
+                      bac = convertMapStore(itemId)
+                    }
+                    vnd = bac * 650
+                    grossRev=vnd.toLong
+          }
+        grossRev
+      }
+
+}
+val dbgAddRaw = spark.read.json("/ge/gamelogs/sdk_sea/2017-10-{10,11}/Log_NIKKITHAI_DBGAdd-2017-10-{10,11}.gz").withColumn("updatetime",dateGmt7(col("updatetime"))).where("updatetime like '2017-10-11%'")
+val gameAddRaw = spark.read.json("/ge/gamelogs/sdk_sea/2017-10-{10,11}/Log_NIKKITHAI_GameAdd-2017-10-{10,11}.gz").withColumn("updatetime",dateGmt7(col("updatetime"))).where("updatetime like '2017-10-11%'")
+      var df = dbgAddRaw.as('a).join(gameAddRaw.as('b), dbgAddRaw("transactionID") === gameAddRaw("transactionID"), "left_outer").where("a.resultCode == '1'")
+        .select("a.updatetime", "a.gameID", "a.userID", "a.transactionID", "a.pmcID", "pmcNetChargeAmt", "pmcGrossChargeAmt", "a.roleID", "b.itemID")
+val dv = df
+println("net_rev")
+dbgAddRaw.agg(sum("pmcNetChargeAmt").cast("long")*650).show
+println("Gross_rev")
+df.withColumn("grossRev",getGross(col("b.itemId"),col("a.pmcId"),col("pmcGrossChargeAmt"))).agg(sum("grossRev").cast("long")).show
+
+
+
+
+
+
+
+############### nikki
+  spark.read.option("delimiter","\t").csv("/ge/warehouse/nikki/recharge/2017-10-03/part-v000-o000-r-00000.gz").agg(sum("_c5").cast("long")).show
+
+######## fishot - hc
+select sum(net_revenue) from recharge where ds='2017-10-03';
+
+#####CK - Ingame
+ hdfs dfs -text /ge/warehouse/ck/recharge/2017-08-22/part-v000-o000-r-00000.gz | awk -F"\t" '{sum+=$8} END {printf "%.f\n",sum}'
+spark.read.option("delimiter","\t").csv("/ge/warehouse/ck/recharge/2017-08-22/part-v000-o000-r-00000.gz").agg(sum("_c7").cast("long")).show
+
+##### - ZTM
+hdfs dfs -text /ge/gamelogs/ztm/20171003/logs/*/scenetlog* | grep -i RechargeFlow | awk -F"|" '{sum+=$15} END {printf "%.f\n",sum*20}'
+
+ty gia:  20
+
+### dttk
+
+spark.read.option("delimiter","\t").csv("/ge/warehouse/dttk/paying/2017-10-03/part-m-00000.gz").where("_c18 = '1'").agg(sum("_c10").cast("long")).show
+
+
+#### ddd2mp2 - hcatalog
+select sum(zing_xu) from ddd2mp2.recharge where ds='2017-10-03';
+
+### coccgsn - ingame
+spark.read.option("delimiter","\t").csv("/ge/warehouse/coccgsn/recharge/2017-10-03/part-v000-o000-r-00000.gz").agg(sum("_c11").cast("long")).show
+
+### vcth - ingame
+spark.read.option("delimiter","\t").csv("/ge/warehouse/vcth/recharge/2017-10-03/part-v000-o000-r-00000.gz").agg(sum("_c6").cast("long")*100).show
+
+### gnm - hcatalog
+select sum(money)*100 from gnm.recharge where ds = '2017-10-03'
+
+### ntgh -ingame
+hdfs dfs -text /ge/gamelogs/vhw/2017-10-03/*/2017-10-03_RECHARGE_LOG.log.gz | awk -F" " '{sum+=$12} END {printf "%.f\n",sum*2.5*100}'
+
+### coccmgsn - ingame
+52001 - gross rev
+spark.read.option("delimiter","\t").csv("/ge/warehouse/coccm/recharge/2017-08-{26,27}/part-v000-o000-r-00000.gz").where("_c3 like '2017-08-27%'").agg(sum("_c11").cast("long")).show
+
+16001 - net rev
+spark.read.option("delimiter","\t").csv("/ge/warehouse/coccm/recharge/2017-08-{22,23}/part-v000-o000-r-00000.gz").where("_c3 like '2017-10-03%'").agg(sum("_c10").cast("long")).show
+
+##### tftb2s
+
+spark.read.option("delimiter","\t").csv("/ge/gamelogs/tftb2s/2017-10-03/Paying/Paying*.gz").where("_c9 not like '0'").agg(sum("_c10").cast("long")).show
+
+###### 3qmobile
+spark.read.option("delimiter","\t").csv("/ge/warehouse/3qmobile/recharge/2017-10-03/part-v000-o000-r-00000.gz").agg(sum("_c10").cast("long")).show
+
+######
+cffbs
+spark.read.option("delimiter",",").csv("/ge/gamelogs/cube/2017-08-24/IFRS/IFRS.gz").agg(sum("_c11").cast("long")).show
+
+##### hctq
+
+spark.read.option("header","true").option("delimiter",",").csv("/ge/gamelogs/tqvs/20171003/log/*/*_t_u_pay_order_20171003.csv").where("PaySuccess == 1 and CurrencyType not like 'PW_INTERNAL_PAY' ").agg(sum("Points").cast("long")*100).show
+
+
+##### NLMB - Hcatalog
+select sum(gold) from nlmb.recharge where ds='2017-10-03';
+
+
+##### TNUH
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.DataFrame
+import vng.ge.stats.etl.constant.Constants
+import vng.ge.stats.etl.transform.adapter.base.{FairyFormatter}
+import vng.ge.stats.etl.utils.{DateTimeUtils, PathUtils}
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+
+    val pattern = "/ge/gamelogs/tnuh/20171003/datalog/l10vn-*"
+    val raw = spark.read.textFile(pattern)
+
+
+    val filterlog = (line:String) => {
+      var rs = false
+      if(line.length>0 && line.contains(",")){
+        val str = line.substring(0,line.indexOf(",")).toLowerCase
+        if (str.contains("2017-10-03") && (str.contains("prepaid") )){
+          rs = true
+        }
+      }
+      rs
+    }
+    val payment = raw.filter(line => filterlog(line)).map { line =>
+      val str = line.substring(line.indexOf(",")+1,line.length)
+      val mapper = new ObjectMapper() with ScalaObjectMapper
+      mapper.registerModule(DefaultScalaModule)
+      val obj = mapper.readValue[Map[String, Object]](str)
+      val net = (obj("jade").toString.toDouble*250).toString
+      val devic = (obj("jade").toString.toDouble*250).toString
+      val device_type = obj("device_type").toString
+
+
+
+      ("tnuh",net,device_type)
+    }.toDF("gameCode","net","device_type")
+
+
+    payment.agg(sum("net").cast("long")).show
+
+
+###### cubefarm_global
+import vng.ge.stats.etl.utils.{Common, DateTimeUtils}
+
+  val dateGmt7 = udf { (dateTime: String) => {
+    val timeStamp = DateTimeUtils.getTimestamp(dateTime)+25200000L
+    DateTimeUtils.getDate(timeStamp)
+  }
+  }
+     val df = spark.read.option("delimiter","\t").csv("/ge/warehouse/cfgfbs1/paying/2017-10-{10,11}/part-v000-o000-r-00000.gz")
+
+  df.withColumn("datetime",dateGmt7(col("_c0"))).where("datetime like '2017-10-03%'").agg(sum("_c10").cast("long")).show
+
+########### dptk
+
+spark.read.option("delimiter","\t").csv("/ge/warehouse/dppg3/recharge/2017-11-05").agg(sum("_c10").cast("long")).show
+dptk
+#####  NIKKISEA
+  import org.apache.spark.rdd.RDD
+  import vng.ge.stats.etl.transform.udf.MyUdf.dateTimeIncrement
+  import vng.ge.stats.etl.constant.Constants
+  val sf = Constants.FIELD_NAME
+  var rs = spark.read.textFile("/ge/gamelogs/nikkisea/201710{03,04}/log_recharge/Nikki_Logcharge_2017-10-{03,04}.csv.gz")
+  val paymentDs = rs.map(line => line.split("\",\"")).map { line =>
+
+            val money = line(5)
+            val dateTime = line(11)
+            val netRev = money
+            ("nikkisea", dateTime, netRev)
+        }.toDF(sf.GAME_CODE, sf.LOG_DATE, sf.NET_AMT)
+  val logDateWithTimeZone = udf { (datetime: String, timezone: String) => {
+    val time = dateTimeIncrement(datetime, -3600)
+    time
+  }
+  }
+ paymentDs.withColumn("log_date",logDateWithTimeZone(col("log_date"),lit("0"))).where("log_date like '%2017-10-04%'").agg(sum("net_amt").cast("long")).show
+
+########### DKV
+
+spark.read.option("delimiter","\t").csv("/ge/gamelogs/tn/20171003/*/pay.csv").agg(sum("_c10").cast("long")).show
+
+
+##########Tvc - ingame
+ spark.read.option("delimiter",",").csv("/ge/gamelogs/tvc/20171003/*/t_user_pay*").agg(sum("_c6").cast("long")).show(false)
+
+ ############# HKH
+ spark.read.option("delimiter","\t").csv("/ge/dragon/warehouse/hkh/recharge/2017-10-03/part-r-00000.gz").agg(sum("_c7").cast("long")).show
+
+###### omg2
+import vng.ge.stats.etl.utils.{Common, DateTimeUtils}
+
+  val convertDate = udf { (timeStamp: Long) => {
+    DateTimeUtils.getDate(timeStamp*1000)
+  }
+  }
+
+val df = spark.read.option("delimiter","|").csv("/ge/gamelogs/omg2/20171003/datalog/web/*/stat.log.*").where("_c0 like '%Charge%' and _c7 like '4'")
+
+df.withColumn("_c5",convertDate(col("_c5"))).where("_c5 like '%2017-10-03%'").agg(sum("_c11").cast("long")*250).show
+
+######## sglfbs
+
+spark.read.option("delimiter","\t").csv("/ge/gamelogs/sglfbs/2017-10-03/paying/paying-2017-10-03").agg(sum("_c7").cast("long")).show
+
+######## izfbs2
+import vng.ge.stats.etl.utils.{Common, DateTimeUtils}
+
+  val converDate = udf { (dateTime: String) => {
+    val timeStamp = DateTimeUtils.getTimestamp(dateTime)+39600000
+    DateTimeUtils.getDate(timeStamp)
+  }
+  }
+
+val df = spark.read.option("delimiter","\t").csv("/ge/gamelogs/izfbs2/2017-10-{10,11}/user_paying/user_paying-2017-10-{10,11}")
+
+df.withColumn("log_date",converDate(col("_c1"))).where("log_date like '%2017-10-03%'").agg(sum("_c7").cast("long")).show
+
+####### H5SS
+select sum(money)from h5ss.recharge where ds like '%2017-10-03%'and state == 2
+
+###### SIAMPLAYINDO
+import vng.ge.stats.etl.utils.{Common, DateTimeUtils}
+
+  val dateGmt7 = udf { (dateTime: String) => {
+    val timeStamp = DateTimeUtils.getTimestamp(dateTime)+7*60*60*1000
+    DateTimeUtils.getDate(timeStamp)
+  }
+  }
+
+  val df = spark.read.json("/ge/gamelogs/sdk_sea/2017-10-{10,11}/Log_SIAMPLAYINDO_DBGAdd/Log_SIAMPLAYINDO_DBGAdd-2017-10-{10,11}.gz")
+  df.withColumn("log_time",dateGmt7(col("updatetime"))).filter("log_time like '2017-10-03%'").agg((sum("pmcNetChargeAmt")*1.724).cast("long")).show
+
+
+######## icamfbs2
+spark.read.option("delimiter","\t").csv("/ge/warehouse/ica/ingame_recharge/2017-10-03/part-v000-o000-r-00000.gz").where("_c18='1' and _c0 like '%2017-10-03%' and _c21 is not null").agg(sum("_c9").cast("long")).show
+
+######## 360live
+
+
+
+     val getMoney = udf { (money: String,currency:String) => {
+      var vnd = 0.0
+          val convertMap = Map(
+            "AUD" -> 16543.0,
+            "VND" -> 1.0,
+            "EUR" -> 24585.87,
+            "USD" -> 22700.0,
+            "GBP" -> 29099.24,
+            "HKD" -> 2878.57,
+            "JPY" -> 196.87,
+            "KRW" -> 18.49,
+            "SGD" -> 15925.7,
+            "THB" -> 641.5,
+            "CAD" -> 16336.68,
+            "CHF" -> 22284.26
+          )
+
+      if (convertMap.contains(currency)) {
+        vnd = money.toDouble * convertMap(currency)
+      }
+      vnd
+       }
+       }
+
+
+  val df = spark.read.option("delimiter","\t").csv("/ge/gamelogs/360live/2017-10-03/360live_payment_stats/360live_payment_stats-2017-10-03.gz").where("_c9 != 'GMTOOL'")
+   df.withColumn("net_amt",getMoney(col("_c4"),col("_c5"))).agg(sum("net_amt").cast("long")).show
+
+
+
+
+##############
+spark.read.parquet("/ge/warehouse/fishot/ub/data/payment_2/2017-10-13").collect().foreach { row => val netRevenue = row.getDouble(11)}

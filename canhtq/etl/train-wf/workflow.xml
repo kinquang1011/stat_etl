@@ -1,0 +1,39 @@
+<workflow-app name="UB :: TRAIN-Workflow" xmlns="uri:oozie:workflow:0.5" xmlns:sla="uri:oozie:sla:0.2">
+    <global>
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <configuration>
+            <property>
+                <name>mapreduce.job.queuename</name>
+                <value>production</value>
+            </property>
+            <property>
+                <name>oozie.launcher.mapred.job.queue.name</name>
+                <value>interactive</value>
+            </property>
+        </configuration>
+    </global>
+    <start to="etl" />
+    <action name="etl">
+       <spark xmlns="uri:oozie:spark-action:0.1">
+         <job-tracker>${jobTracker}</job-tracker>
+         <name-node>${nameNode}</name-node>
+         <master>yarn-cluster</master>
+         <name>spark-TRAIN</name>
+         <class>vng.ge.stats.etl.transform.Factory</class>
+         <jar>${nameNode}${workflowApplicationPath}/lib/stats-etlr-1.0.jar</jar>
+         <spark-opts>${sparkOpts}</spark-opts>
+         <arg>logDate=${logDate}</arg>
+         <arg>className=${className}</arg>
+        </spark>
+        <ok to="end"/>
+        <error to="kill"/>
+    </action>
+    
+    <kill name="kill">
+        <message>UB :: TRAIN-Workflow - workflow fail</message>
+    </kill>
+    <end name="end"/>
+    
+</workflow-app>
+

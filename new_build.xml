@@ -1,0 +1,85 @@
+<project name="stats-etlr" default="mvn-package" basedir=".">
+	<!-- mostly from: http://www.scala-lang.org/node/98 -->
+	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="lib" />
+	<property name="build.dir" value="build" />
+	<property name="build.lib.dir" value="${build.dir}/lib" />
+	<property name="target.dir" value="target" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="main-class" value="vng.ge.stats.report.job.Runner" />
+	<property name="jar-name" value="stats-etlr-1.0.jar" />
+
+    <property name="host" value="10.60.43.15" />
+	<property name="farm-user" value="fairy" />
+	<property name="local.bundle.dir" value="oozie" />
+	<property name="farm.bundle.dir" value="/home/${farm-user}/oozie" />
+	<property name="access-server.user.dir" value="/home/${farm-user}" />
+	<property name="hdfs.user.dir" value="/user/${farm-user}" />
+	<property name="src.conf" value="conf" />
+	
+	<!-- set scala.home -->
+	<property environment="env" />
+	<property name="scala.home" value="${env.SCALA_HOME}" />
+	<target name="init">
+		<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
+		<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar" />
+		<property name="scala.reflect" value="${scala.home}/lib/scala-reflect.jar" />
+		<path id="build.classpath">
+			<pathelement location="${scala-library.jar}" />
+			<pathelement location="${build.dir}" />
+		</path>
+		<taskdef resource="scala/tools/ant/antlib.xml">
+			<classpath>
+				<pathelement location="${scala-compiler.jar}" />
+				<pathelement location="${scala-library.jar}" />
+				<pathelement location="${scala.reflect}" />
+			</classpath>
+		</taskdef>
+	</target>
+	<target name="clean">
+		<delete dir="${classes.dir}" failonerror="false" />
+		<delete dir="${build.lib.dir}" failonerror="false" />
+		<delete dir="${build.dir}" failonerror="false" />
+		<delete dir="${target.dir}" failonerror="false" />
+		<mkdir dir="${build.dir}" />
+	</target>
+	<target name="sbt-compile" depends="clean">
+		<exec dir="." executable="/usr/bin/sbt">
+			<arg line="package" />
+		</exec>
+	</target>
+
+	<target name="sbt-assembly" depends="clean">
+		<exec dir="." executable="/usr/bin/sbt">
+			<arg line="assembly" />
+		</exec>
+	</target>
+
+	<target name="mvn-package" depends="clean">
+		<exec dir="." executable="mvn">
+			<arg line="clean package" />
+		</exec>
+	</target>
+
+	<target name="deploy">
+		<echo>cmd: ==>${user.home}/.ssh/id_rsa</echo>
+		<property name="rel_bundle.dir" value="${dev}/bundle/${group}/${type}" />
+		<property name="bundle.dir" value="oozie/${rel_bundle.dir}" />
+		<property name="access.server" value="${farm-user}@${host}" />
+		<property name="local-bundle" value="${dev}" />
+		<property name="keyfile" value="${user.home}/.ssh/id_rsa" />
+		<property name="bundle.hdfs.dir" value="/user/${farm-user}/oozie" />
+		<echo>${user} ==>${user.home}/.ssh/id_rsa</echo>
+		<sshexec host="${host}" trust="true" username="${farm-user}" keyfile="${keyfile}" command="mkdir -p ${bundle.dir}/lib"/>
+		<scp verbose="yes" todir="${access.server}:${access-server.user.dir}/${bundle.dir}"  username="${farm-user}" keyfile="${keyfile}" passphrase="${pass}" trust="true">
+			<fileset dir="${bundle.dir}"/>
+		</scp>
+		<scp verbose="yes"  todir="${access.server}:${access-server.user.dir}/${bundle.dir}/lib" keyfile="${keyfile}" passphrase="${pass}" trust="true">
+			<fileset dir="${target.dir}/">
+				<include name="${jar-name}" />
+			</fileset>
+		</scp>
+		<sshexec trust="true" host="${host}" username="${farm-user}" keyfile="${user.home}/.ssh/id_rsa" command="hdfs dfs -mkdir -p ${bundle.hdfs.dir}/${rel_bundle.dir}"/>
+		<sshexec trust="true" host="${host}" username="${farm-user}" keyfile="${user.home}/.ssh/id_rsa" command="hdfs dfs -put -f ${access-server.user.dir}/${bundle.dir} ${bundle.hdfs.dir}/${dev}/bundle/${group}"/>
+	</target>
+</project>

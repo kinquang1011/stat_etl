@@ -1,0 +1,37 @@
+<bundle-app name="UB :: ETL :: YENTN2 :: ${group} - ${type} - Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>60</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>etlJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>reportJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.etl.transform.Factory</value></property>
+        <property><name>serverReport</name><value>false</value></property>
+    </parameters>
+
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+
+    <coordinator name="SPARK :: YENTN2 :: Projectc-VN">
+        <app-path>${bundleApplicationPath}/pjcvn-coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>ProjectC</value></property>
+            <property><name>gameCode</name><value>projectc</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="SPARK :: YENTN2 :: Projectc-SEA">
+        <app-path>${bundleApplicationPath}/pjcsea-coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Pjcsea</value></property>
+            <property><name>gameCode</name><value>pjcsea</value></property>
+        </configuration>
+    </coordinator>
+
+</bundle-app>
+

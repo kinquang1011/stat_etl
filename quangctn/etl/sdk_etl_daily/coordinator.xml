@@ -1,0 +1,64 @@
+<coordinator-app name="SPARK :: ${gameCode} - ${group} - ${type}" frequency="${coord:days(1)}"
+        start="${startDate}" end="${endDate}"
+        timezone="${coordTimeZone}"
+        xmlns="uri:oozie:coordinator:0.4"
+        xmlns:sla="uri:oozie:sla:0.2">
+
+    <controls>
+        <timeout>${coordTimeout}</timeout>
+        <concurrency>${coordConcurrency}</concurrency>
+    </controls>
+
+    <datasets>
+        <dataset name="fullLog" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${logDir}/${sdkSource}/${YEAR}-${MONTH}-${DAY}</uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+    </datasets>
+
+    <input-events>
+        <data-in name="fullLogEvent" dataset="fullLog">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+    </input-events>
+
+    <action>
+        <workflow>
+            <app-path>${bundleApplicationPath}/workflow.xml</app-path>
+            <configuration>
+                <property>
+                    <name>logDate</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 0, 'DAY'), "yyyy-MM-dd")}</value>
+                </property>
+                <property>
+                    <name>sdkGameCode</name>
+                    <value>${sdkGameCode}</value>
+                </property>
+                <property>
+                    <name>gameCode</name>
+                    <value>${gameCode}</value>
+                </property>
+                <property>
+                    <name>className</name>
+                    <value>${className}</value>
+                </property>
+                <property>
+                    <name>timezone</name>
+                    <value>${timezone}</value>
+                </property>
+                <property>
+                    <name>changeRate</name>
+                    <value>${changeRate}</value>
+                </property>
+                <property>
+                    <name>sdkSource</name>
+                    <value>${sdkSource}</value>
+                </property>
+                <property>
+                    <name>nominalTime</name>
+                    <value>${coord:nominalTime()}</value>
+                </property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

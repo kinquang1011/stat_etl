@@ -1,0 +1,474 @@
+<bundle-app name="UB :: SPARK :: QUANGCTN :: REPORT - ${type} - Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>720</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>doneFlag</name><value>_SUCCESS</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>statsSparkJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.report.job.Runner</value></property>
+    </parameters>
+	
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+    <coordinator name="UB ::REPORT SPARK :: hkh - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>hkh</value></property>
+            <property><name>mrtgCcu</name><value>207</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB ::REPORT SPARK :: sfgsn - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>sfgsn</value></property>
+            <property><name>mrtgCcu</name><value>131</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB ::REPORT SPARK :: cffbs - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>cffbs</value></property>
+            <property><name>mrtgCcu</name><value>279</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: cfgfbs1 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>cfgfbs1</value></property>
+            <property><name>mrtgCcu</name><value>166</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: siamplay - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>siamplay</value></property>
+            <property><name>mrtgCcu</name><value>232</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: siamplayindo - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>siamplayindo</value></property>
+            <property><name>mrtgCcu</name><value>255</value></property>
+        </configuration>
+    </coordinator>
+    
+    <coordinator name="UB ::REPORT SPARK :: cgmbgfbs1 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>cgmbgfbs1</value></property>
+            <property><name>mrtgCcu</name><value>096</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: sfmgsn - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>sfmgsn</value></property>
+            <property><name>mrtgCcu</name><value>110</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: coccmgsn - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>coccmgsn</value></property>
+            <property><name>mrtgCcu</name><value>130</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: nlmb - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>nlmb</value></property>
+            <property><name>mrtgCcu</name><value>118</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: sglfbs - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>sglfbs</value></property>
+            <property><name>mrtgCcu</name><value>293</value></property>
+        </configuration>
+    </coordinator>
+
+        <coordinator name="UB ::REPORT SPARK :: coccgsn - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>coccgsn</value></property>
+            <property><name>mrtgCcu</name><value>108</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: stct - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>stct</value></property>
+            <property><name>mrtgCcu</name><value>210</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: fishotthai - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>fishotthai</value></property>
+            <property><name>mrtgCcu</name><value>241</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: nikkithai - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>nikkithai</value></property>
+            <property><name>mrtgCcu</name><value>253</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: h5ss - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>h5ss</value></property>
+            <property><name>mrtgCcu</name><value>284</value></property>
+        </configuration>
+    </coordinator>
+
+
+
+    <coordinator name="UB :: REPORT SPARK:: dkv - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>dkv</value></property>
+            <property><name>mrtgCcu</name><value>274</value></property>
+        </configuration>
+    </coordinator>
+
+
+    <coordinator name="UB :: REPORT SPARK:: izfbs2 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>izfbs2</value></property>
+            <property><name>mrtgCcu</name><value>243</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: REPORT SPARK:: tnuh - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>tnuh</value></property>
+            <property><name>mrtgCcu</name><value>261</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: ttk - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ttk</value></property>
+            <property><name>mrtgCcu</name><value>288</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: ckck - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ckck</value></property>
+            <property><name>mrtgCcu</name><value>298</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: kvm - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>kvm</value></property>
+            <property><name>mrtgCcu</name><value>299</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: ztm - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ztm</value></property>
+            <property><name>mrtgCcu</name><value>249</value></property>
+        </configuration>
+    </coordinator>
+
+    
+    <!--Old PC games-->
+
+    <coordinator name="UB ::REPORT SPARK :: Jx1 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>jx1</value></property>
+            <property><name>mrtgCcu</name><value>002</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Jx2 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>jx2</value></property>
+            <property><name>mrtgCcu</name><value>003</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Wjx - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>wjx</value></property>
+            <property><name>mrtgCcu</name><value>007</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Jx1f - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>jx1f</value></property>
+            <property><name>mrtgCcu</name><value>004</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Jx1ctc - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>jx1ctc</value></property>
+            <property><name>mrtgCcu</name><value>162</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Msg - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>msg</value></property>
+            <property><name>mrtgCcu</name><value>072</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Nlvn - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>nlvn</value></property>
+            <property><name>mrtgCcu</name><value>044</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Tlbbw - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>tlbbw</value></property>
+            <property><name>mrtgCcu</name><value>195</value></property>
+
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Fs - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>fs</value></property>
+            <property><name>mrtgCcu</name><value>009</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Zg - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>zg</value></property>
+            <property><name>mrtgCcu</name><value>016</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: NKVN - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>nkvn</value></property>
+            <property><name>mrtgCcu</name><value>037</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Zs - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>zs</value></property>
+            <property><name>mrtgCcu</name><value>015</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: ttl3d - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ttl3d</value></property>
+            <property><name>mrtgCcu</name><value>113</value></property>
+        </configuration>
+    </coordinator>
+
+<!--End pc game -->
+    <coordinator name="UB ::REPORT SPARK :: user - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>jxm</value></property>
+            <property><name>mrtgCcu</name><value>221</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: MUW - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>muw</value></property>
+            <property><name>mrtgCcu</name><value>303</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: PNTT - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>pntt</value></property>
+            <property><name>mrtgCcu</name><value>286</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Aumobile - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>aumobile</value></property>
+            <property><name>mrtgCcu</name><value>277</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Dmn360mobi - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>dmn360mobi</value></property>
+            <property><name>mrtgCcu</name><value>307</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: TLBBM - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>tlbbm</value></property>
+            <property><name>mrtgCcu</name><value>180</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Ctpsea - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ctpsea</value></property>
+            <property><name>mrtgCcu</name><value>INT1482306301</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: 3qmobile - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>3qmobile</value></property>
+            <property><name>mrtgCcu</name><value>153</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Dt2 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>dt2</value></property>
+            <property><name>mrtgCcu</name><value>137</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Ddd2mp2 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ddd2mp2</value></property>
+            <property><name>mrtgCcu</name><value>251</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Ygh5 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ygh5</value></property>
+            <property><name>mrtgCcu</name><value>314</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Ygzl - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ygzl</value></property>
+            <property><name>mrtgCcu</name><value>323</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Dtm - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>dtm</value></property>
+            <property><name>mrtgCcu</name><value>280</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Vtl - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>vtl</value></property>
+            <property><name>mrtgCcu</name><value>309</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Tdcl - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>tdcl</value></property>
+            <property><name>mrtgCcu</name><value>304</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Farmh5 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>farm</value></property>
+            <property><name>mrtgCcu</name><value>310</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Srz - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>srzes</value></property>
+            <property><name>mrtgCcu</name><value>273</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Hltq - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>hltq</value></property>
+            <property><name>mrtgCcu</name><value>306</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Skt - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>skt</value></property>
+            <property><name>mrtgCcu</name><value>311</value></property>
+        </configuration>
+    </coordinator>
+
+
+    <coordinator name="UB ::REPORT SPARK :: Nsbd - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>nsbd</value></property>
+            <property><name>mrtgCcu</name><value>294</value></property>
+        </configuration>
+    </coordinator>
+</bundle-app>
+        <!--55-->
+

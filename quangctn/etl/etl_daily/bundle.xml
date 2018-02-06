@@ -1,0 +1,121 @@
+<bundle-app name="UB :: SPARK :: ${logType} :: QUANGCTN  - Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>14400</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>doneFlag</name><value>_SUCCESS</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>statsSparkJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.etl.transform.Factory</value></property>
+    </parameters>
+
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+    <coordinator name="UB :: SPARK :: TVC - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tvc_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Tvc</value></property>
+            <property><name>gameCode</name><value>tvc</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: 360LIVE - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/live360_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Live360</value></property>
+            <property><name>gameCode</name><value>360live</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: NIKKI SEA - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/nikkisea_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>NikkiSea</value></property>
+            <property><name>gameCode</name><value>NikkiSea</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: FishotThai - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tvc_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>FishotThai</value></property>
+            <property><name>gameCode</name><value>fishotthai</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: ZTM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tvc_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Ztm</value></property>
+            <property><name>gameCode</name><value>ztm</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: HK - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tvc_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Hk</value></property>
+            <property><name>gameCode</name><value>ttq</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: HCTQ - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tvc_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Hctq</value></property>
+            <property><name>gameCode</name><value>tqvs</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: OMG2 - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tvc_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Omg2</value></property>
+            <property><name>gameCode</name><value>omg2</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: CCNSEA - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/live360_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>CcnSea</value></property>
+            <property><name>gameCode</name><value>ccnsea</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: Tftb2s - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/live360_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Tftb2s</value></property>
+            <property><name>gameCode</name><value>tftb2s</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: Dummy - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/live360_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Dummy</value></property>
+            <property><name>gameCode</name><value>zingplaythai</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: Nikki Thai - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tvc_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>NikkiThai_Hourly</value></property>
+            <property><name>gameCode</name><value>nikkithai</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: KVM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/coordinator3.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Kvm</value></property>
+            <property><name>gameCode</name><value>kvm</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: IREAD - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/live360_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Iread</value></property>
+            <property><name>gameCode</name><value>iread</value></property>
+        </configuration>
+    </coordinator>
+
+
+
+</bundle-app>
+

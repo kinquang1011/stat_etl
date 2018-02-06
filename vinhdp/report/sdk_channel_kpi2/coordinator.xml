@@ -1,0 +1,65 @@
+<coordinator-app name="SPARK :: VDP :: ${group} - ${gameCode} - ${type}" frequency="${coord:days(1)}"
+        start="${startDate}" end="${endDate}"
+        timezone="${coordTimeZone}"
+        xmlns="uri:oozie:coordinator:0.4"
+        xmlns:sla="uri:oozie:sla:0.2">
+    
+    <controls>
+        <timeout>${coordTimeout}</timeout>
+        <concurrency>${coordConcurrency}</concurrency>
+    </controls>
+
+    <datasets>
+        <dataset name="activityDS" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/${gameCode}/ub/sdk_data/${activity}/${YEAR}-${MONTH}-${DAY}</uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        
+        <dataset name="accregisterDS" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/${gameCode}/ub/sdk_data/${accregister}/${YEAR}-${MONTH}-${DAY}</uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        
+        <dataset name="paymentDS" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/${gameCode}/ub/sdk_data/${payment}/${YEAR}-${MONTH}-${DAY}</uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        
+        <dataset name="firstchargeDS" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/${gameCode}/ub/sdk_data/${firstcharge}/${YEAR}-${MONTH}-${DAY}</uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+    </datasets>
+
+    <input-events>
+
+        <data-in name="activityDI" dataset="activityDS">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        
+        <data-in name="accregisterDI" dataset="accregisterDS">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        
+        <data-in name="paymentDI" dataset="paymentDS">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        
+        <data-in name="firstchargeDI" dataset="firstchargeDS">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+    </input-events>
+
+    <action>
+        <workflow>
+            <app-path>${bundleApplicationPath}</app-path>
+            <configuration>
+                <property>
+                    <name>logDate</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 0, 'DAY'), "yyyy-MM-dd")}</value>
+                </property>
+                <property><name>nominalTime</name><value>${coord:nominalTime()}</value></property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

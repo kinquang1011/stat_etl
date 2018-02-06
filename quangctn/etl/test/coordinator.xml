@@ -1,0 +1,40 @@
+<coordinator-app name="UB :: SPARK :: ZTM - ${logType}" frequency="${coord:days(1)}"
+        start="${startDate}" end="${endDate}"
+        timezone="${coordTimeZone}"
+        xmlns="uri:oozie:coordinator:0.4"
+        xmlns:sla="uri:oozie:sla:0.2">
+
+    <controls>
+        <timeout>${coordTimeout}</timeout>
+        <concurrency>${coordConcurrency}</concurrency>
+    </controls>
+
+    <datasets>
+        <dataset name="login" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsgameLog}/${gameCode}/${YEAR}${MONTH}${DAY}/</uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+    </datasets>
+
+    <input-events>
+        <data-in name="loginEvent" dataset="login">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+    </input-events>
+
+    <action>
+        <workflow>
+            <app-path>${bundleApplicationPath}/workflow1.xml</app-path>
+            <configuration>
+                <property>
+                    <name>logDate</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 0, 'DAY'), "yyyy-MM-dd")}</value>
+                </property>
+                <property>
+                    <name>nominalTime</name>
+                    <value>${coord:nominalTime()}</value>
+                </property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

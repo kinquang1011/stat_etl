@@ -1,0 +1,384 @@
+<coordinator-app name="UB :: SPARK :: NonCard - ${logType}" frequency="${coord:days(1)}"
+                 start="${startDate}" end="${endDate}"
+                 timezone="${coordTimeZone}"
+                 xmlns="uri:oozie:coordinator:0.4"
+                 xmlns:sla="uri:oozie:sla:0.2">
+
+    <controls>
+        <timeout>${coordTimeout}</timeout>
+        <concurrency>${coordConcurrency}</concurrency>
+    </controls>
+
+    <datasets>
+        <!-- Login
+        * 1.Co ti phu
+        * 2.Farmery : SuperFarm + Farmery Web
+        * 3.Bida
+        * 4.Bida Mobile
+        * 5.Bida Card
+        * 6.Co ca ngua
+        * 7.Co tuong
+        * 8.Co up
+        * 9.Thoi loan
+        * 10. Caro-->
+        <!--CTP-->
+        <dataset name="ctpLogin" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/ctpgsn/login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="ctpLogout" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/ctpgsn/logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--SUPER FARM + FARMERY WEB-->
+        <dataset name="superFarmIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>hcat://metastore.hadoop.gda.lo:9083/superfarm/login/ds=${YEAR}-${MONTH}-${DAY}
+            </uri-template>
+            <done-flag></done-flag>
+        </dataset>
+        <dataset name="superFarmOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>hcat://metastore.hadoop.gda.lo:9083/superfarm/logout/ds=${YEAR}-${MONTH}-${DAY}
+            </uri-template>
+            <done-flag></done-flag>
+        </dataset>
+
+        <dataset name="farmeryWebIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/sfgsn/login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="farmeryWebOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/sfgsn/logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- BIDA -->
+        <dataset name="bidaIn" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_bida/user/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- BIDA MOBILE -->
+        <dataset name="bidaMobileIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_bidamobile/login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="bidaMobileOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_bidamobile/logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- CCN -->
+        <dataset name="ccnIn" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/ccn/unknown_log/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- COTUONG -->
+        <dataset name="cotuongIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_cotuong/player_login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="cotuongOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_cotuong/player_logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- COUP -->
+        <!--<dataset name="coupIn" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_coup/player_login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="coupOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_coup/player_logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>-->
+        <!-- THOILOAN -->
+        <dataset name="thoiloanIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/coccgsn/login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="thoiloanmobileIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/coccm/login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="thoiloanmobileOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/coccm/logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+
+        <!-- CARO -->
+        <dataset name="caroIn" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsgameLog}/carobz/${YEAR}-${MONTH}-${DAY}/carobz_user
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+
+        <!-- Register
+        * 1.Co ti phu
+        * 2.Farmery : SuperFarm + Farmery Web
+        * 3.Bida
+        * 4.Bida Mobile
+        * 5.Bida Card
+        * 6.Co ca ngua
+        * 7.Co tuong
+        * 8.Co up
+        * 9.Thoi loan
+        * 10. Caro-->
+        <!-- CTP -->
+        <dataset name="ctpReg" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/ctpgsn/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--Farmery : SuperFarm + Farmery Web-->
+        <dataset name="superfarmReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/superfarm/register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="sfgsnReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/sfgsn/register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- BIDA -->
+        <dataset name="bidaReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsFairyDir}/myplay_bida/ub/data/total_login_acc_2/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- Bida Mobile -->
+        <dataset name="bidamobileReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_bidamobile/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- Bida Card -->
+        <dataset name="bidaCardReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsFairyDir}/myplay_bidacard/ub/data/total_login_acc_2/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- CCN -->
+        <dataset name="ccnReg" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsFairyDir}/myplay_ccn/ub/data/total_login_acc_2/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- COTUONG -->
+        <dataset name="cotuongReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+                <uri-template>${hdfsLogDir}/myplay_cotuong/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- COUP -->
+      <!--  <dataset name="coupReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_coup/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>-->
+        <!-- THOI LOAN -->
+        <dataset name="coccmReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/coccm/register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="coccgsnReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/coccgsn/register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+
+        <!-- CARO -->
+        <dataset name="caroReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsFairyDir}/myplay_caro/ub/data/total_login_acc_2/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+
+        <!--Payment -->
+        <dataset name="payment" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsgameLog}/myplay_payment_db/${YEAR}${MONTH}${DAY}
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+
+    </datasets>
+
+    <input-events>
+        <data-in name="ctploginEvent" dataset="ctpLogin">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="ctplogoutEvent" dataset="ctpLogout">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!-- SUPER FARM -->
+        <data-in name="sfloginEvent" dataset="superFarmIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="sflogoutEvent" dataset="superFarmOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!-- FARMERY WEB -->
+        <data-in name="sfwebloginEvent" dataset="farmeryWebIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="sfweblogoutEvent" dataset="farmeryWebOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!-- BIDA -->
+        <data-in name="bidaloginEvent" dataset="bidaIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!-- BIDA MOBILE -->
+        <data-in name="bidamobileloginEvent" dataset="bidaMobileIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="bidamobilelogoutEvent" dataset="bidaMobileOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!--CCN -->
+        <data-in name="ccnloginEvent" dataset="ccnIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!-- COTUONG -->
+        <data-in name="cotuongloginEvent" dataset="cotuongIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="cotuonglogoutEvent" dataset="cotuongOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!-- COUP -->
+        <!--<data-in name="couploginEvent" dataset="coupIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="couplogoutEvent" dataset="coupOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>-->
+        <!-- THOILOAN -->
+        <data-in name="thoiloanloginEvent" dataset="thoiloanIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="tlmobileloginEvent" dataset="thoiloanmobileIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="tlmobilelogoutEvent" dataset="thoiloanmobileOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!-- CARO -->
+        <data-in name="carologinEvent" dataset="caroIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <!-- REGISTER -->
+        <data-in name="ctpRegEvent" dataset="ctpReg">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        <data-in name="superfarmRegEvent" dataset="superfarmReg">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        <data-in name="sfgsnRegEvent" dataset="sfgsnReg">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        <data-in name="bidaRegEvent" dataset="bidaReg">
+            <instance>${coord:current(-1)}</instance>
+        </data-in>
+        <data-in name="bidamobileRegEvent" dataset="bidamobileReg">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        <data-in name="bidaCardRegEvent" dataset="bidaCardReg">
+            <instance>${coord:current(-1)}</instance>
+        </data-in>
+        <data-in name="ccnRegEvent" dataset="ccnReg">
+            <instance>${coord:current(-1)}</instance>
+        </data-in>
+        <data-in name="cotuongRegEvent" dataset="cotuongReg">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        <!--<data-in name="coupRegEvent" dataset="coupReg">
+            <instance>${coord:current(0)}</instance>
+        </data-in>-->
+        <data-in name="coccmRegEvent" dataset="coccmReg">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        <data-in name="coccgsnRegEvent" dataset="coccgsnReg">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        <data-in name="caroRegEvent" dataset="caroReg">
+            <instance>${coord:current(-1)}</instance>
+        </data-in>
+        <!--PAYMENT-->
+        <data-in name="paymentEvent" dataset="payment">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+    </input-events>
+
+    <action>
+        <workflow>
+            <app-path>${bundleApplicationPath}/workflow1.xml</app-path>
+            <configuration>
+                <property>
+                    <name>logDate</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 0, 'DAY'), "yyyy-MM-dd")}</value>
+                </property>
+                <property>
+                    <name>nominalTime</name>
+                    <value>${coord:nominalTime()}</value>
+                </property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

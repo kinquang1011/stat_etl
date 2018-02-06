@@ -1,0 +1,188 @@
+<bundle-app name="UB :: ETL :: LAMNT6 :: ${group} - ${logType} - ETL Daily Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>720</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>doneFlag</name><value>_SUCCESS</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>statsSparkJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.etl.transform.Factory</value></property>
+    </parameters>
+
+
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+    <coordinator name="UB :: SPARK :: CUBE - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/cube_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>CubeEtl</value></property>
+            <property><name>gameCode</name><value>cffbs</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Dkv - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/dkv_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.DkvEtl</value></property>
+            <property><name>gameCode</name><value>dkv</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: SGLFBS - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/sglfbs_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Sglfbs</value></property>
+            <property><name>gameCode</name><value>sglfbs</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Izfbs2 - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/izfbs2_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Izfbs2</value></property>
+            <property><name>gameCode</name><value>izfbs2</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: TNUH - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tnuh_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Tnuh</value></property>
+            <property><name>gameCode</name><value>tnuh</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Aumobile - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/aumobile_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Aumobile</value></property>
+            <property><name>gameCode</name><value>aumobile</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: NLMB - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/nlmb_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Nlmb</value></property>
+            <property><name>gameCode</name><value>nlmb</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: TTK - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/ttk_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Ttk</value></property>
+            <property><name>gameCode</name><value>ttk</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: CKCK - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/ckck_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Ckck</value></property>
+            <property><name>gameCode</name><value>ckck</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Dmn360mobi - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/dmn360mobi_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Dmn360mobi</value></property>
+            <property><name>gameCode</name><value>dmn360mobi</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Tdcl - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tdcl_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Tdcl</value></property>
+            <property><name>gameCode</name><value>tdcl</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: PROJECTC - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/pjcvn_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>ProjectC</value></property>
+            <property><name>gameCode</name><value>projectc</value></property>
+            <property><name>sparkOpts</name><value>${pjcvnSparkOpts}</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Farmh5 - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/farmh5_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Farm</value></property>
+            <property><name>gameCode</name><value>farm</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Ygh5 - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/ygh5_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Ygh5</value></property>
+            <property><name>gameCode</name><value>ygh5</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Ygzl - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/ygh5_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Ygzl</value></property>
+            <property><name>gameCode</name><value>ygzl</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Dtm - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/dtm_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Dtm</value></property>
+            <property><name>gameCode</name><value>dtm</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Hltq - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/hltq_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Hltq</value></property>
+            <property><name>gameCode</name><value>hltq</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Vtl - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/vtl_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Vtl</value></property>
+            <property><name>gameCode</name><value>vtl</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Srzes - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/srzes_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Srzes</value></property>
+            <property><name>gameCode</name><value>srzes</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Gbm - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/gbm_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Gbm</value></property>
+            <property><name>gameCode</name><value>gbm</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Dmzth - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/gbm_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Dmzth</value></property>
+            <property><name>gameCode</name><value>dmzth</value></property>
+        </configuration>
+    </coordinator>
+</bundle-app>
+

@@ -1,0 +1,50 @@
+<coordinator-app name="SPARK :: LAMNT6 :: ${group} - ${gameCode} - ${type}" frequency="${coord:minutes(30)}"
+        start="${startDate}" end="${endDate}"
+        timezone="${coordTimeZone}"
+        xmlns="uri:oozie:coordinator:0.4"
+        xmlns:sla="uri:oozie:sla:0.2">
+
+    <controls>
+        <timeout>${coordTimeout}</timeout>
+        <concurrency>${coordConcurrency}</concurrency>
+    </controls>
+
+    <datasets>
+        <dataset name="checkDone" frequency="${coord:minutes(15)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>/ge/gamelogs/dmztl/${YEAR}${MONTH}${DAY}/loggame/logserver</uri-template>
+            <done-flag></done-flag>
+        </dataset>
+
+    </datasets>
+
+    <input-events>
+        <data-in name="checkDoneEvent" dataset="checkDone">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+    </input-events>
+
+    <action>
+        <workflow>
+            <app-path>${bundleApplicationPath}/workflow.xml</app-path>
+            <configuration>
+                <property>
+                    <name>logDate</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 7, 'HOUR'), "yyyy-MM-dd")}</value>
+                </property>
+                <property>
+                    <name>hourly</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 7, 'HOUR'), "HH-mm")}</value>
+                </property>
+                <property>
+                    <name>hourInDay</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 7, 'HOUR'), "HH")}</value>
+                </property>
+                <property>
+                    <name>nominalTime</name>
+                    <value>${coord:nominalTime()}</value>
+                </property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>
+

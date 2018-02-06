@@ -1,0 +1,186 @@
+<bundle-app name="UB :: SPARK :: LAMNT6 :: REPORT - ${type} - Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>1080</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>doneFlag</name><value>_SUCCESS</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>statsSparkJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.report.job.Runner</value></property>
+
+        <property><name>ccu</name><value>activity_2</value></property>
+        <property><name>activity</name><value>activity_2</value></property>
+        <property><name>payment</name><value>payment_2</value></property>
+        <property><name>accregister</name><value>accregister_2</value></property>
+        <property><name>firstcharge</name><value>first_charge_2</value></property>
+    </parameters>
+	
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+    
+    <coordinator name="UB ::REPORT SPARK :: CUBE - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>cffbs</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="SPARK :: REPORT:: dkv - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>dkv</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="SPARK :: REPORT:: SGLFBS - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>sglfbs</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="SPARK :: REPORT:: IZFBS2 - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>izfbs2</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="SPARK :: REPORT:: TNUH - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>tnuh</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Aumobile - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>aumobile</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: NLMB - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>nlmb</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: TTK - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ttk</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: CKCK - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ckck</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Dmn360mobi - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>dmn360mobi</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Tdcl - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>tdcl</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: FarmH5 - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>farm</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Ygh5 - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ygh5</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Ygzl - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ygzl</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Dtm - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>dtm</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Ctpsea - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ctpsea</value></property>
+            <property><name>hdfsLogDir</name><value>/ge/warehouse</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Hltq - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>hltq</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Vtl - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>vtl</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Srzes - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>srzes</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Gbm - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>gbm</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Skt - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>skt</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Nsbd - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>nsbd</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB ::REPORT SPARK :: Dmzth - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>dmzth</value></property>
+        </configuration>
+    </coordinator>
+</bundle-app>

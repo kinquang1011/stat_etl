@@ -1,0 +1,154 @@
+<bundle-app name="UB :: ETL :: game migrate pc :: ${group} - ${logType} - ETL Daily Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>1440</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>doneFlag</name><value>_SUCCESS</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>statsSparkJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.etl.transform.Factory</value></property>
+    </parameters>
+
+
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: Jx1 :: 10h30 AM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/jx1_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Jx1</value></property>
+            <property><name>gameCode</name><value>jx1</value></property>
+            <property><name>startDate</name><value>2017-09-14T05:30Z</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: Jx1f :: 9h PM  - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/jx1f_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Jx1f</value></property>
+            <property><name>gameCode</name><value>jx1f</value></property>
+            <property><name>startDate</name><value>2017-09-14T02:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: Jx1ctc :: 10h30 PM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/jx1ctc_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Jx1ctc</value></property>
+            <property><name>gameCode</name><value>jx1ctc</value></property>
+            <property><name>startDate</name><value>2017-09-14T15:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: Jx2 :: 9h30 AM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/jx2_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Jx2</value></property>
+            <property><name>gameCode</name><value>jx2</value></property>
+            <property><name>startDate</name><value>2017-09-14T05:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: Wjx :: 9h30 AM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/wjx_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Wjx</value></property>
+            <property><name>gameCode</name><value>wjx</value></property>
+            <property><name>startDate</name><value>2017-09-14T02:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <!--2017-07-14 log 10hpm-->
+    <coordinator name="UB :: SPARK :: MIGRATE PC:: fs :: 6h AM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/fs_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Fs</value></property>
+            <property><name>gameCode</name><value>fs</value></property>
+            <property><name>startDate</name><value>2017-09-14T00:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: msg :: 9h30 PM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/msg_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Msg</value></property>
+            <property><name>gameCode</name><value>msg</value></property>
+            <property><name>startDate</name><value>2017-09-14T12:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: tlbbw :: 10h PM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/tlbbw_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Tlbbw</value></property>
+            <property><name>gameCode</name><value>tlbbw</value></property>
+            <property><name>startDate</name><value>2017-09-14T13:00Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: nlvn :: 10h30 AM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/nlvn_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Nlvn</value></property>
+            <property><name>gameCode</name><value>nlvn</value></property>
+            <property><name>startDate</name><value>2017-09-14T03:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: zg :: 12h pm - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/zg_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Zg</value></property>
+            <property><name>gameCode</name><value>zg</value></property>
+            <property><name>startDate</name><value>2017-09-14T05:00Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: nkvn :: 12h PM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/nkvn_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Nkvn</value></property>
+            <property><name>gameCode</name><value>nkvn</value></property>
+            <property><name>startDate</name><value>2017-09-14T5:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: zs :: 9h AM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/zs_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Zs</value></property>
+            <property><name>gameCode</name><value>zs</value></property>
+            <property><name>startDate</name><value>2017-09-14T2:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: ttl3d :: 7h PM - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/ttl3d_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Ttl3d</value></property>
+            <property><name>gameCode</name><value>ttl3d</value></property>
+            <property><name>startDate</name><value>2017-09-14T12:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: ck :: Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/ck_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Ck</value></property>
+            <property><name>gameCode</name><value>ck</value></property>
+            <property><name>startDate</name><value>2017-09-14T20:30Z</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: MIGRATE PC :: kv :: Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/kv_coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>pc.Kv</value></property>
+            <property><name>gameCode</name><value>kv</value></property>
+            <property><name>startDate</name><value>2017-09-14T19:30Z</value></property>
+        </configuration>
+    </coordinator>
+</bundle-app>
+

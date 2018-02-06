@@ -1,0 +1,280 @@
+<project name="stats-etlr" default="mvn-package" basedir=".">
+	<!-- mostly from: http://www.scala-lang.org/node/98 -->
+	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="lib" />
+	<property name="build.dir" value="build" />
+	<property name="build.lib.dir" value="${build.dir}/lib" />
+	<property name="target.dir" value="target" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="main-class" value="vng.ge.stats.report.job.Runner" />
+	<property name="jar-name" value="stats-etlr-1.0.jar" />
+
+    <property name="host" value="10.60.43.15" />
+    <property name="user" value="fairy" />
+	<property name="dev.bundle.dir" value="/home/${user}/oozie" />
+	<property name="hdfs.bundle.dir" value="/home/${user}/oozie" />
+
+    <property name="bundle.dir" value="/home/${user}/ub/bundle/vinhdp" />
+    <property name="bundle.hdfs.dir" value="/user/${user}/oozie/vinhdp/bundle" />
+
+	<property name="bundle.dir.tlv" value="/home/${user}/ub/bundle/tuonglv" />
+	<property name="bundle.hdfs.dir.tlv" value="/user/${user}/oozie/tuonglv/bundle" />
+
+	<property name="bundle.dir.quangctn" value="/home/${user}/ub/bundle/quangctn" />
+	<property name="bundle.hdfs.dir.quangctn" value="/user/${user}/oozie/quangctn/bundle" />
+
+	<property name="bundle.dir.canhtq" value="/home/${user}/oozie/canhtq/bundle" />
+	<property name="bundle.hdfs.dir.canhtq" value="/user/${user}/oozie/canhtq/bundle" />
+
+	<property name="bundle.dir.lamnt6" value="/home/${user}/oozie/lamnt6/bundle" />
+	<property name="bundle.hdfs.dir.lamnt6" value="/user/${user}/oozie/lamnt6/bundle" />
+
+	<property name="src.conf" value="conf" />
+	
+	<!-- set scala.home -->
+	<property environment="env" />
+	<property name="scala.home" value="${env.SCALA_HOME}" />
+	<target name="init">
+		<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
+		<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar" />
+		<property name="scala.reflect" value="${scala.home}/lib/scala-reflect.jar" />
+		<path id="build.classpath">
+			<pathelement location="${scala-library.jar}" />
+			<pathelement location="${build.dir}" />
+		</path>
+		<taskdef resource="scala/tools/ant/antlib.xml">
+			<classpath>
+				<pathelement location="${scala-compiler.jar}" />
+				<pathelement location="${scala-library.jar}" />
+				<pathelement location="${scala.reflect}" />
+			</classpath>
+		</taskdef>
+	</target>
+	<target name="clean">
+		<delete dir="${classes.dir}" failonerror="false" />
+		<delete dir="${build.lib.dir}" failonerror="false" />
+		<delete dir="${build.dir}" failonerror="false" />
+		<delete dir="${target.dir}" failonerror="false" />
+		<mkdir dir="${build.dir}" />
+	</target>
+	<target name="sbt-compile" depends="clean">
+		<exec dir="." executable="/usr/bin/sbt">
+			<arg line="package" />
+		</exec>
+	</target>
+
+	<target name="sbt-assembly" depends="clean">
+		<exec dir="." executable="/usr/bin/sbt">
+			<arg line="assembly" />
+		</exec>
+	</target>
+
+	<target name="mvn-package" depends="clean">
+		<exec dir="." executable="mvn">
+			<arg line="clean package" />
+		</exec>
+	</target>
+
+	<!-- ANT COPY ETL ZDEPLOY & PUT TO HDFS-->
+	<target name="copy">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir}" />
+		<property name="local-bundle" value="vinhdp" />
+		
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir}/${group}/${type}/lib"/>
+		
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}">
+			<fileset dir="${local-bundle}/${group}/${type}"/>
+		</scp>
+		
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}/lib" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}">
+			<fileset dir="${target.dir}/">
+				<include name="${jar-name}" />
+			</fileset>
+		</scp>
+		
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+									command="hdfs dfs -mkdir -p ${bundle.hdfs.dir}/${group}"/>
+		
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+					command="hdfs dfs -put -f ${bundle.dir}/${group}/${type} ${bundle.hdfs.dir}/${group}/"/>
+	</target>
+	
+	<!-- ANT REBUILD & COPY TO ZDEPLOY & PUT TO HDFS-->
+	<target name="recopy" depends="mvn-package">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir}" />
+		<property name="local-bundle" value="vinhdp" />
+		
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir}/${group}/${type}/lib"/>
+		
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}">
+			<fileset dir="${local-bundle}/${group}/${type}"/>
+		</scp>
+		
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}/lib" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}">
+			<fileset dir="${target.dir}/">
+                <include name="${jar-name}" />
+			</fileset>
+		</scp>
+		
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+							command="hdfs dfs -mkdir -p ${bundle.hdfs.dir}/${group}"/>
+		
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+					command="hdfs dfs -put -f ${bundle.dir}/${group}/${type} ${bundle.hdfs.dir}/${group}/"/>
+	</target>
+
+	<target name="tcopy">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir.tlv}" />
+		<property name="local-bundle" value="tuonglv" />
+
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir.tlv}/${group}/${type}/lib"/>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}">
+			<fileset dir="${local-bundle}/${group}/${type}"/>
+		</scp>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}/lib" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}">
+			<fileset dir="${target.dir}/">
+				<include name="${jar-name}" />
+			</fileset>
+		</scp>
+
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -mkdir -p ${bundle.hdfs.dir.tlv}/${group}"/>
+
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -put -f ${bundle.dir.tlv}/${group}/${type} ${bundle.hdfs.dir.tlv}/${group}/"/>
+	</target>
+
+	<target name="qcopy">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir.quangctn}" />
+		<property name="local-bundle" value="quangctn" />
+		<echo>${user} ==>${user.home}/.ssh/id_rsa</echo>
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir.quangctn}/${group}/${type}/lib"/>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="${local-bundle}/${group}/${type}"/>
+		</scp>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}/lib" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="${target.dir}/">
+				<include name="${jar-name}" />
+			</fileset>
+		</scp>
+
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -mkdir -p ${bundle.hdfs.dir.quangctn}/${group}"/>
+
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -put -f ${bundle.dir.quangctn}/${group}/${type} ${bundle.hdfs.dir.quangctn}/${group}/"/>
+	</target>
+
+	<!-- ANT REBUILD & COPY TO ZDEPLOY & PUT TO HDFS-->
+	<target name="qrecopy" depends="mvn-package">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir.quangctn}" />
+		<property name="local-bundle" value="quangctn" />
+
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir.quangctn}/${group}/${type}/lib"/>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}">
+			<fileset dir="${local-bundle}/${group}/${type}"/>
+		</scp>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}/lib" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}">
+			<fileset dir="${target.dir}/">
+				<include name="${jar-name}" />
+			</fileset>
+		</scp>
+
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -mkdir -p ${bundle.hdfs.dir}/${group}"/>
+
+		<sshexec host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -put -f ${bundle.dir}/${group}/${type} ${bundle.hdfs.dir}/${group}/"/>
+	</target>
+
+
+	<target name="ccopy">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir.canhtq}" />
+		<property name="local-bundle" value="canhtq" />
+		<echo>${user} ==>${user.home}/.ssh/id_rsa</echo>
+		<sshexec host="${host}" trust="true" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir.canhtq}/${group}/${type}/lib"/>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="${local-bundle}/${group}/${type}"/>
+		</scp>
+
+		<scp verbose="yes"  todir="${remote-bundle}/${group}/${type}/lib" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="${target.dir}/">
+				<include name="${jar-name}" />
+			</fileset>
+		</scp>
+
+		<sshexec trust="true" host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -mkdir -p ${bundle.hdfs.dir.canhtq}/${group}"/>
+
+		<sshexec trust="true" host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -put -f ${bundle.dir.canhtq}/${group}/${type} ${bundle.hdfs.dir.canhtq}/${group}/"/>
+	</target>
+	<target name="deploy">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir}/${dev}/bundle" />
+		<property name="local-bundle" value="canhtq" />
+		<echo>${user} ==>${user.home}/.ssh/id_rsa</echo>
+		<sshexec host="${host}" trust="true" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir.canhtq}/${group}/${type}/lib"/>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="${local-bundle}/${group}/${type}"/>
+		</scp>
+
+		<scp verbose="yes"  todir="${remote-bundle}/${group}/${type}/lib" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="${target.dir}/">
+				<include name="${jar-name}" />
+			</fileset>
+		</scp>
+
+		<sshexec trust="true" host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -mkdir -p ${bundle.hdfs.dir.canhtq}/${group}"/>
+
+		<sshexec trust="true" host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -put -f ${bundle.dir.canhtq}/${group}/${type} ${bundle.hdfs.dir.canhtq}/${group}/"/>
+	</target>
+	<target name="master_data">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir.canhtq}" />
+		<property name="local-bundle" value="canhtq" />
+		<echo>${user} ==>${user.home}/.ssh/id_rsa</echo>
+		<sshexec host="${host}" trust="true" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir.canhtq}/master_data"/>
+
+		<scp verbose="yes" todir="${remote-bundle}/master_data" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="master_data"/>
+		</scp>
+
+		<sshexec trust="true" host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -mkdir -p /ge/fairy/master_data"/>
+
+		<sshexec trust="true" host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -put -f ${bundle.dir.canhtq}/master_data /ge/fairy/"/>
+	</target>
+
+	<target name="lam-oozie-deploy">
+		<property name="remote-bundle" value="${user}@${host}:${bundle.dir.lamnt6}" />
+		<property name="local-bundle" value="lamnt6" />
+		<echo>${user} ==>${user.home}/.ssh/id_rsa</echo>
+		<sshexec host="${host}" trust="true" username="${user}" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p ${bundle.dir.lamnt6}/${group}/${type}/lib"/>
+
+		<scp verbose="yes" todir="${remote-bundle}/${group}/${type}" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="${local-bundle}/${group}/${type}"/>
+		</scp>
+
+		<scp verbose="yes"  todir="${remote-bundle}/${group}/${type}/lib" keyfile="${user.home}/.ssh/id_rsa" passphrase="${pass}" trust="true">
+			<fileset dir="${target.dir}/">
+				<include name="${jar-name}" />
+			</fileset>
+		</scp>
+
+		<sshexec trust="true" host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -mkdir -p ${bundle.hdfs.dir.lamnt6}/${group}"/>
+
+		<sshexec trust="true" host="${host}" username="${user}" keyfile="${user.home}/.ssh/id_rsa"
+				 command="hdfs dfs -put -f ${bundle.dir.lamnt6}/${group}/${type} ${bundle.hdfs.dir.lamnt6}/${group}/"/>
+	</target>
+</project>

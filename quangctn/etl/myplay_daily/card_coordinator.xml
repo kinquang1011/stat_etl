@@ -1,0 +1,241 @@
+<coordinator-app name="UB :: SPARK :: Card - ${logType}" frequency="${coord:days(1)}"
+                 start="${startDate}" end="${endDate}"
+                 timezone="${coordTimeZone}"
+                 xmlns="uri:oozie:coordinator:0.4"
+                 xmlns:sla="uri:oozie:sla:0.2">
+
+    <controls>
+        <timeout>${coordTimeout}</timeout>
+        <concurrency>${coordConcurrency}</concurrency>
+    </controls>
+
+    <datasets>
+        <!--
+        * 1.Bacay
+        * 2.Binh
+        * 3.PokerHK
+        * 4.Sam
+        * 5.Tala
+        * 6.Tien Len
+        * 7.Xi Dzach
+        * -->
+        <!--1.Bacay-->
+        <dataset name="bacayIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_bacay/user/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--2.Binh-->
+        <dataset name="binhIn" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_binh/player_login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="binhOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_binh/player_logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--3.PokerHk-->
+        <dataset name="pokerHkIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_pokerhk/login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="pokerHkOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_pokerhk/logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--4.Sam-->
+        <dataset name="samIn" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_sam/player_login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="samOut" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_sam/player_logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--5.Tala-->
+        <dataset name="talaIn" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_tala/login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="talaOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_tala/logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--6.TienLen-->
+        <dataset name="tienlenIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_tienlen/login/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="tienlenOut" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_tienlen/logout/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--7.XiDzach-->
+        <dataset name="xidzachIn" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/xidzach/unknown_log/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!-- Register
+        * 1.Bacay
+        * 2.Binh
+        * 3.PokerHK
+        * 4.Sam
+        * 5.Tala
+        * 6.Tien Len
+        * 7.Xi Dzach
+        * -->
+
+        <dataset name="bacayReg" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsFairyDir}/myplay_bacay/ub/data/total_login_acc_2/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="xidzachReg" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>${hdfsFairyDir}/myplay_xidzach/ub/data/total_login_acc_2/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="binhReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_binh/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+      <!--  <dataset name="binhReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_binh/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>-->
+        <dataset name="pokerHkReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_pokerhk/register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="samReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_sam/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="talaReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_tala/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <dataset name="tienlenReg" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsLogDir}/myplay_tienlen/new_register/${YEAR}-${MONTH}-${DAY}/
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+        <!--Payment -->
+        <dataset name="payment" frequency="${coord:days(1)}" initial-instance="${startDate}"
+                 timezone="${coordTimeZone}">
+            <uri-template>${hdfsgameLog}/myplay_payment_db/${YEAR}${MONTH}${DAY}
+            </uri-template>
+            <done-flag>${doneFlag}</done-flag>
+        </dataset>
+
+    </datasets>
+
+    <input-events>
+        <data-in name="bacayInEvent" dataset="bacayIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="binhInEvent" dataset="binhIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="binhOutEvent" dataset="binhOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="pokerHkInEvent" dataset="pokerHkIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="pokerHkOutEvent" dataset="pokerHkOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="samInEvent" dataset="samIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="samOutEvent" dataset="samOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="talaInEvent" dataset="talaIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="talaOutEvent" dataset="talaOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="tienlenInEvent" dataset="tienlenIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="tienlenOutEvent" dataset="tienlenOut">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="xidzachInEvent" dataset="xidzachIn">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+        <data-in name="bacayRegEvent" dataset="bacayReg">
+            <instance>${coord:current(-1)}</instance>
+        </data-in>
+        <data-in name="xidzachRegEvent" dataset="xidzachReg">
+            <instance>${coord:current(-1)}</instance>
+        </data-in>
+
+        <!--PAYMENT-->
+        <data-in name="paymentEvent" dataset="payment">
+            <start-instance>${coord:current(-1)}</start-instance>
+            <end-instance>${coord:current(0)}</end-instance>
+        </data-in>
+    </input-events>
+
+    <action>
+        <workflow>
+            <app-path>${bundleApplicationPath}/workflow1.xml</app-path>
+            <configuration>
+                <property>
+                    <name>logDate</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 0, 'DAY'), "yyyy-MM-dd")}</value>
+                </property>
+                <property>
+                    <name>nominalTime</name>
+                    <value>${coord:nominalTime()}</value>
+                </property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

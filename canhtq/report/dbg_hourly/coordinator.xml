@@ -1,0 +1,24 @@
+<coordinator-app name="SPARK :: ${userName} :: ${group} - ${gameCode} - ${type}" frequency="${coord:minutes(30)}"
+        start="${startDate}" end="${endDate}"
+        timezone="${coordTimeZone}"
+        xmlns="uri:oozie:coordinator:0.4"
+        xmlns:sla="uri:oozie:sla:0.2">
+    
+    <controls>
+        <timeout>${coordTimeout}</timeout>
+        <concurrency>${coordConcurrency}</concurrency>
+    </controls>
+
+    <action>
+        <workflow>
+            <app-path>${bundleApplicationPath}</app-path>
+            <configuration>
+                <property>
+                    <name>logDate</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 0, 'DAY'), "yyyy-MM-dd")}</value>
+                </property>
+                <property><name>nominalTime</name><value>${coord:nominalTime()}</value></property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

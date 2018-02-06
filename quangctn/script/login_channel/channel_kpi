@@ -1,0 +1,3 @@
+val a = spark.read.parquet("/ge//warehouse/nikkisea/ub/sdk_data/accregister_2/2017-08-14")
+val b = spark.read.parquet("/ge/warehouse/nikkisea/ub/sdk_data/first_charge_2/2017-08-14")
+var join1 = a.as('a).join(b.as('b),a("id")===b("id"),"left_outer").where("b.id is not null").select("b.id","a.log_date","b.channel")

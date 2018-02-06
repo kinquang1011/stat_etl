@@ -1,0 +1,60 @@
+<workflow-app name="SPARK :: ${userName} :: ${type} - ${logDate}" xmlns="uri:oozie:workflow:0.5" xmlns:sla="uri:oozie:sla:0.2">
+    
+    <global>
+		<job-tracker>${jobTracker}</job-tracker>
+       	<name-node>${nameNode}</name-node>
+       	
+       	<configuration>
+            <property><name>mapreduce.job.queuename</name><value>production</value></property>
+            <property><name>oozie.launcher.mapred.job.queue.name</name><value>interactive</value></property>
+            <property><name>oozie.wf.workflow.notification.url</name>
+            <value>http://10.60.43.15:7070/example/?jobId=$jobId&amp;status=$status&amp;logDate=${logDate}</value>
+        </property>
+        </configuration>
+    </global>
+
+    <start to="qc" />
+
+    <!-- BEGIN MAIN PROCESSING -->
+    <action name="qc">
+        <spark xmlns="uri:oozie:spark-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>${sparkMaster}</master>
+            <name>spark-${className}-${logDate}</name>
+            <class>${className}</class>
+            <jar>${nameNode}${bundleApplicationPath}/lib/${statsSparkJar}</jar>
+            <spark-opts>${sparkOpts}</spark-opts>
+            <arg>rootDir=${rootDir}</arg>
+            <arg>logDate=${logDate}</arg>
+            <arg>logDir=${logDir}</arg>
+        </spark>
+        <ok to="end"/>
+        <error to="alert-error"/>
+    </action>
+    <!-- END MAIN PROCESSING -->
+
+    <action name="alert-error">
+        <email xmlns="uri:oozie:email-action:0.1">
+            <to>${toRecipients}</to>
+            <subject>WORKFLOW FAILED :::: ${wf:name()}</subject>
+            <body>
+LOG DATE: ${logDate}
+            
+NAME: ${wf:name()}
+USER RETENTION
+ID: ${wf:id()}
+
+ERROR MESSAGE: [${wf:errorMessage(wf:lastErrorNode())}]
+            </body>
+        </email>
+        <ok to="kill"/>
+        <error to="kill"/>
+	</action>
+	
+    <kill name="kill">
+        <message>UB :: canhtq ::  ${group} - ${type} - workflow fail</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>
+

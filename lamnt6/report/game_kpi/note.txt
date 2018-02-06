@@ -1,0 +1,5 @@
+Bundle for TVC GAME REPORT : bundle.xml
+Bundle for TVC SID REPORT : bundle-sid.xml
+Configure on fairy
+1. ub/bunble/quangctn/tvc/report/report-job-bundle.properties 
+2. ub/bunble/quangctn/tvc/report/report-sid-job-bundle.properties 

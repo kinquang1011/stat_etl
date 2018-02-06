@@ -1,0 +1,78 @@
+<bundle-app name="UB :: SPARK :: ${type} :: LAMNT6  - Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>1440</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>doneFlag</name><value>_SUCCESS</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>statsSparkJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.etl.transform.Factory</value></property>
+    </parameters>
+
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+    <coordinator name="UB :: SPARK :: Dmn360mobi SDK - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>sdk.Dmn360mobi</value></property>
+            <property><name>gameCode</name><value>dmn360mobi</value></property>
+            <property><name>sdkGameCode</name><value>DMZ</value></property>
+            <property><name>timezone</name><value>7</value></property>
+            <property><name>changeRate</name><value>1</value></property>
+            <property><name>sdkSource</name><value>sdk</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: NikkiSea SDK_sea - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>sdk.Nikkisea</value></property>
+            <property><name>gameCode</name><value>nikkisea</value></property>
+            <property><name>sdkGameCode</name><value>NIKKISEA</value></property>
+            <property><name>timezone</name><value>0</value></property>
+            <property><name>changeRate</name><value>1</value></property>
+            <property><name>sdkSource</name><value>sdk_sea</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: HLTQ SDK - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>base.SdkFormatter</value></property>
+            <property><name>gameCode</name><value>hltq</value></property>
+            <property><name>sdkGameCode</name><value>HUANLONG</value></property>
+            <property><name>timezone</name><value>7</value></property>
+            <property><name>changeRate</name><value>1</value></property>
+            <property><name>sdkSource</name><value>sdk</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: TNUH SDK - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>base.SdkFormatter</value></property>
+            <property><name>gameCode</name><value>tnuh</value></property>
+            <property><name>sdkGameCode</name><value>THIENNU</value></property>
+            <property><name>timezone</name><value>7</value></property>
+            <property><name>changeRate</name><value>1</value></property>
+            <property><name>sdkSource</name><value>sdk</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="UB :: SPARK :: Aumobile SDK - Daily ETL Coord">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>base.SdkFormatter</value></property>
+            <property><name>gameCode</name><value>aumobile</value></property>
+            <property><name>sdkGameCode</name><value>AUM</value></property>
+            <property><name>timezone</name><value>7</value></property>
+            <property><name>changeRate</name><value>1</value></property>
+            <property><name>sdkSource</name><value>sdk</value></property>
+        </configuration>
+    </coordinator>
+</bundle-app>
+

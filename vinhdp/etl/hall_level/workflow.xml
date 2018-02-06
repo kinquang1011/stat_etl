@@ -1,0 +1,58 @@
+<workflow-app name="SPARK :: VDP :: ${group} - ${gameCode} - ${type} - ${logDate}" xmlns="uri:oozie:workflow:0.5" xmlns:sla="uri:oozie:sla:0.2">
+    
+    <global>
+		<job-tracker>${jobTracker}</job-tracker>
+       	<name-node>${nameNode}</name-node>
+       	
+       	<configuration>
+            <property><name>mapreduce.job.queuename</name><value>production</value></property>
+            <property><name>oozie.launcher.mapred.job.queue.name</name><value>default</value></property>
+        </configuration>
+    </global>
+    
+    <start to="etl-to-parquet" />
+ 
+    <!-- BEGIN MAIN PROCESSING -->
+    <action name="etl-to-parquet">
+		<spark xmlns="uri:oozie:spark-action:0.1">
+			<job-tracker>${jobTracker}</job-tracker>
+	       	<name-node>${nameNode}</name-node>
+			<master>${sparkMaster}</master>
+            <mode>${sparkMode}</mode>
+			<name>spark-${group}-${gameCode}-${type}-${logDate}</name>
+			<class>${sparkClass}</class>
+			<jar>${nameNode}${bundleApplicationPath}/lib/${statsSparkJar}</jar>
+			<spark-opts>${sparkOpts}</spark-opts>
+
+			<arg>className=${className}</arg>
+			<arg>logDate=${logDate}</arg>
+        </spark>
+        <ok to="end"/>
+        <error to="alert-error"/>
+    </action>
+    <!-- END MAIN PROCESSING -->
+
+    <action name="alert-error">
+        <email xmlns="uri:oozie:email-action:0.1">
+            <to>${toRecipients}</to>
+            <subject>WORKFLOW FAILED :::: ${wf:name()}</subject>
+            <body>
+LOG DATE: ${logDate}
+            
+NAME: ${wf:name()}
+USER RETENTION
+ID: ${wf:id()}
+
+ERROR MESSAGE: [${wf:errorMessage(wf:lastErrorNode())}]
+            </body>
+        </email>
+        <ok to="kill"/>
+        <error to="kill"/>
+	</action>
+	
+    <kill name="kill">
+        <message>UB :: VDP :: ${group} -${gameCode} - ${type} - workflow fail</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>
+

@@ -1,0 +1,36 @@
+<bundle-app name="UB :: SPARK :: QUANGCTN :: REPORT - ${type} - Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>720</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>doneFlag</name><value>_SUCCESS</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>statsSparkJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.report.job.Runner</value></property>
+
+        <property><name>ccu</name><value>ccu_2</value></property>
+    </parameters>
+	
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+
+    <coordinator name="SPARK :: VDP :: hpt - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>hpt</value></property>
+            <property><name>reportNumber</name><value>1</value></property>
+        </configuration>
+    </coordinator>
+    <coordinator name="SPARK :: VDP :: NIKKITHAI - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator2.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>nikkithai</value></property>
+            <property><name>reportNumber</name><value>1</value></property>
+        </configuration>
+    </coordinator>
+
+</bundle-app>

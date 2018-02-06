@@ -1,0 +1,2 @@
+mysql -uroot -h10.60.22.2 -pHyi76tZpro ubstats;
+mysql -uroot -p123456 ubstats;

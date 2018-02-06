@@ -1,0 +1,81 @@
+JXM - ingame
+hdfs dfs -text /ge/warehouse/jxm/RechargeFlow/2017-07-23/* | awk -F"\t" '{sum+=$10} END {printf "%.f\n",sum}'
+
+HPT - sdk
+spark.read.json("/ge/gamelogs/sdk/2017-09-04/Log_HPT_DBGAdd-2017-09-04.gz").select("pmcGrossChargeAmt","pmcNetChargeAmt","serverID","transactionID","userID","updatetime").orderBy(desc("pmcNetChargeAmt")).show(100,false)
+
+ProjectC
+spark.read.option("delimiter","\\t").csv("/ge/gamelogs/projectc/20170723/pjc_20170723_logdb/t_acct_water_*.gz").where("_c9 ==1 and _c10 ==1 and _c11==1  ").agg(sum("_c15").cast("long")).show(false)
+
+NIKKI - ingame
+spark.read.option("delimiter",",").csv("/ge/gamelogs/tnuh/20170723/datalog/").filter("_c0 like 'pre%'").show
+
+360 Live - Ingame
+[fairy@c415 ~]$ hdfs dfs -text /ge/gamelogs/360live/2017-07-24/360live_payment_stats/*.gz | awk -F"\t" '{ print $2}' | sort -u | wc -l
+ZTM
+
+hdfs dfs -text /ge/gamelogs/ztm/20170725/logs/*/scenetlog* | grep -i RechargeFlow | awk -F"|" '{sum+=$15} END {printf "%.f\n",sum}'
+
+CK - Ingame
+ hdfs dfs -text /ge/warehouse/ck/recharge/2017-07-26/part-v000-o000-r-00000.gz | awk -F"\t" '{sum+=$8} END {printf "%.f\n",sum}'
+
+Tvc - ingame
+ spark.read.option("delimiter",",").csv("/ge/gamelogs/tvc/20170726/*/t_user_pay*").agg(sum("_c6").cast("long")).show(false)
+NIKKITHAI - SDK
+STCT - SDK
+import org.apache.spark.rdd.RDD
+  import vng.ge.stats.etl.transform.udf.MyUdf.dateTimeIncrement
+  import vng.ge.stats.etl.constant.Constants
+  val logDateWithTimeZone = udf { (datetime: String, timezone: String) => {
+    var gmt = 7
+    gmt = gmt - timezone.toInt
+    val time = dateTimeIncrement(datetime, gmt * 3600)
+    time
+  }
+  }
+ val df = spark.read.json("/ge/gamelogs/sdk_sea/2017-08-{07,08}/Log_STCT_DBGAdd-2017-08-{07,08}.gz")
+ val a = df.withColumn("log_date",logDateWithTimeZone(col("updatetime"),lit("0"))).where("log_date like '%2017-08-08%'")
+
+ val df = spark.read.json("/ge/gamelogs/sdk_sea/{2017-07-31,2017-08-01}/Log_STCT_DBGAdd-{2017-07-31,2017-08-01}.gz")
+ val a = df.withColumn("log_date",logDateWithTimeZone(col("updatetime"),lit("0"))).where("log_date like '%2017-07-30%'")
+ TFTBS2
+  hdfs dfs -text /ge/gamelogs/tftb2s/2017-07-27/Paying/Paying*.gz| awk -F" " '{sum+=$11} END {printf "%.f\n",sum}'
+
+  NIKKISEA
+  import org.apache.spark.rdd.RDD
+  import vng.ge.stats.etl.transform.udf.MyUdf.dateTimeIncrement
+  import vng.ge.stats.etl.constant.Constants
+   var rs: RDD[String] = null
+val rs = spark.read.textFile("/ge/gamelogs/nikkisea/201707{29,30}/log_recharge/Nikki_Logcharge_2017-07-{29,30}.csv.gz").
+  val paymentDs = rs.map(line => line.split("\",\"")).map { line =>
+
+            val money = line(5)
+            val dateTime = line(11)
+            val netRev = money
+            ("nikkisea", dateTime, netRev)
+        }.toDF(sf.GAME_CODE, sf.LOG_DATE, sf.NET_AMT)
+        val logDateWithTimeZone = udf { (datetime: String, timezone: String) => {
+    var gmt = 7
+    gmt = gmt - timezone.toInt
+    val time = dateTimeIncrement(datetime, gmt * 3600)
+    time
+  }
+  }
+NLMB - Hcatalog
+select sum(gold) from nlmb.recharge where ds='2017-07-31';
+NTGH
+hdfs dfs -text /ge/gamelogs/vhw/2017-08-02/*/2017-08-02_RECHARGE_LOG.log.gz | awk -F" " '{sum+=$12} END {printf "%.f\n",sum}'
+
+NIKKI
+spark.read.option("delimiter","\t").csv("/ge/warehouse/nikki/recharge/2017-08-06/part-v000-o000-r-00000.gz").agg(sum("_c5").cast("long")).show(false)
+CACK
+spark.read.json("/ge/gamelogs/sdk/2017-08-14/Log_CACK_DBGAdd-2017-08-14.gz").select("pmcGrossChargeAmt","pmcNetChargeAmt","serverID","transactionID","userID","updatetime").agg(sum("pmcNetChargeAmt").cast("long")).show(false)
+PROJECT C
+val a=spark.read.option("delimiter","\\t").csv("/ge/gamelogs/projectc/20170815/pjc_20170815_logdb/t_acct_water_*.gz")
+a.where("_c10 == 1 and _c9 == 1 and _c11 ==1").agg(sum("_c15").cast("long")).show(false)
+OMG2
+val  a = spark.read.option("delimiter","|").csv("/ge/gamelogs/omg2/201708{27,28}/datalog/web/*/stat.log.*").where("_c0=='Charge' and _c7==4").orderBy(desc("_c5")).select("_c5","_c11").withColumn("date",date_format(lit(col("_c5").cast("double")).cast("timestamp"),"yyyy-MM-dd hh:mm:ss"))
+
+
+
+

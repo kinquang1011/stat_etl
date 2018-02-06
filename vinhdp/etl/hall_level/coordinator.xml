@@ -1,0 +1,50 @@
+<coordinator-app name="SPARK :: VDP :: ${group} - ${gameCode} - ${type}" frequency="${coord:days(1)}"
+        start="${startDate}" end="${endDate}"
+        timezone="${coordTimeZone}"
+        xmlns="uri:oozie:coordinator:0.4"
+        xmlns:sla="uri:oozie:sla:0.2">
+
+	<parameters>
+        <property><name>parquetPath</name><value>${hdfsLogDir}/${gameCode}/ub/data</value></property>
+    </parameters>
+    
+    <controls>
+        <timeout>${coordTimeout}</timeout>
+        <concurrency>${coordConcurrency}</concurrency>
+    </controls>
+
+    <datasets>
+        <dataset name="login" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>
+                hcat://metastore.hadoop.gda.lo:9083/${gameCode}/${loginName}/ds=${YEAR}-${MONTH}-${DAY}
+            </uri-template>
+        </dataset>
+        <dataset name="logout" frequency="${coord:days(1)}" initial-instance="${startDate}" timezone="${coordTimeZone}">
+            <uri-template>
+                hcat://metastore.hadoop.gda.lo:9083/${gameCode}/${logoutName}/ds=${YEAR}-${MONTH}-${DAY}
+            </uri-template>
+        </dataset>
+    </datasets>
+    <input-events>
+    	<data-in name="loginDI" dataset="login">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+        
+        <data-in name="logoutDI" dataset="logout">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+    </input-events>
+
+    <action>
+        <workflow>
+            <app-path>${bundleApplicationPath}</app-path>
+            <configuration>
+                <property>
+                    <name>logDate</name>
+                    <value>${coord:formatTime(coord:dateOffset(coord:nominalTime(), 0, 'DAY'), "yyyy-MM-dd")}</value>
+                </property>
+                <property><name>nominalTime</name><value>${coord:nominalTime()}</value></property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

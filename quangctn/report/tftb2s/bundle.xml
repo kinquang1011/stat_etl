@@ -1,0 +1,39 @@
+<bundle-app name="UB :: SPARK :: QUANGCTN :: REPORT - ${type} - Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>720</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>doneFlag</name><value>_SUCCESS</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>statsSparkJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.report.job.Runner</value></property>
+
+        <property><name>ccu</name><value>ccu_2</value></property>
+        <property><name>activity</name><value>activity_2</value></property>
+        <property><name>payment</name><value>payment_2</value></property>
+        <property><name>accregister</name><value>accregister_2</value></property>
+        <property><name>firstcharge</name><value>first_charge_2</value></property>
+    </parameters>
+	
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+    
+    <coordinator name="UB ::REPORT SPARK :: TFTB2S - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>tftb2s</value></property>
+        </configuration>
+    </coordinator>
+    <!-- 28/6 Alpha Test ZTM -->
+    <!--<coordinator name="UB ::REPORT SPARK :: ZTM - ${type}">
+        <app-path>${bundleApplicationPath}/coordinator.xml</app-path>
+        <configuration>
+            <property><name>gameCode</name><value>ztm</value></property>
+            <reportNumber>2-3-4-5-6-7-8-9</reportNumber>
+        </configuration>
+    </coordinator>-->
+</bundle-app>

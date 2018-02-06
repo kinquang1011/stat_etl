@@ -1,0 +1,75 @@
+<bundle-app name="UB :: ETL :: LAMNT6 :: ${group} - ${type} -ETL Hourly Bundle" xmlns="uri:oozie:bundle:0.2">
+    <parameters>
+        <property><name>coordTimeZone</name><value>Asia/Ho_Chi_Minh</value></property>
+        <property><name>coordTimeout</name><value>30</value></property>
+        <property><name>coordConcurrency</name><value>1</value></property>
+        <property><name>startDate</name><value>${startDate}</value></property>
+        <property><name>endDate</name><value>${endDate}</value></property>
+        <property><name>frequency</name><value>1</value></property>
+        <property><name>sparkMaster</name><value>yarn-cluster</value></property>
+        <property><name>etlJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>reportJar</name><value>stats-etlr-1.0.jar</value></property>
+        <property><name>sparkClass</name><value>vng.ge.stats.etl.transform.Factory</value></property>
+        <property><name>serverReport</name><value>false</value></property>
+    </parameters>
+
+    <controls>
+        <kick-off-time>${kickOffTime}</kick-off-time>
+    </controls>
+
+    <!--<coordinator name="SPARK :: LAMNT6 :: CUBE - ${group} - ${type}">-->
+        <!--<app-path>${bundleApplicationPath}/cube-coordinator.xml</app-path>-->
+        <!--<configuration>-->
+            <!--<property><name>className</name><value>CubeEtl</value></property>-->
+            <!--<property><name>gameCode</name><value>cffbs</value></property>-->
+        <!--</configuration>-->
+    <!--</coordinator>-->
+
+    <!--<coordinator name="SPARK :: LAMNT6 :: Aumobile - ${group} - ${type}">-->
+        <!--<app-path>${bundleApplicationPath}/aumobile-coordinator.xml</app-path>-->
+        <!--<configuration>-->
+            <!--<property><name>className</name><value>Aumobile</value></property>-->
+            <!--<property><name>gameCode</name><value>aumobile</value></property>-->
+        <!--</configuration>-->
+    <!--</coordinator>-->
+
+    <!--<coordinator name="SPARK :: LAMNT6 :: SGLFBS - ${group} - ${type}">-->
+        <!--<app-path>${bundleApplicationPath}/sglfbs-coordinator.xml</app-path>-->
+        <!--<configuration>-->
+            <!--<property><name>className</name><value>SGLFBS</value></property>-->
+            <!--<property><name>gameCode</name><value>sglfbs</value></property>-->
+        <!--</configuration>-->
+    <!--</coordinator>-->
+    <coordinator name="SPARK :: LAMNT6 :: Dmn360mobi - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/dmn360mobi-coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Dmn360mobi</value></property>
+            <property><name>gameCode</name><value>dmn360mobi</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="SPARK :: LAMNT6 :: Dmzth - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/dmzth-coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Dmzth</value></property>
+            <property><name>gameCode</name><value>dmzth</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="SPARK :: LAMNT6 :: Hltq - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/hltq-coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Hltq</value></property>
+            <property><name>gameCode</name><value>hltq</value></property>
+        </configuration>
+    </coordinator>
+
+    <coordinator name="SPARK :: LAMNT6 :: Skt - ${group} - ${type}">
+        <app-path>${bundleApplicationPath}/skt-coordinator.xml</app-path>
+        <configuration>
+            <property><name>className</name><value>Skt</value></property>
+            <property><name>gameCode</name><value>skt</value></property>
+        </configuration>
+    </coordinator>
+</bundle-app>
+
